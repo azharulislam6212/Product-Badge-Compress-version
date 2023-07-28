@@ -1,0 +1,52 @@
+{%- liquid
+
+              assign on_sale = false
+              assign bestseller = false
+              assign new = false
+              assign frame = false
+ 
+
+              if product.compare_at_price > product.price
+              assign on_sale = true
+              endif  
+
+                for tag in product.tags
+                  if tag contains '_badge_'
+                    assign tag_starts_with = tag | slice: 0
+                    if tag_starts_with == '_'
+                      assign custom_label = tag | replace: '_badge_', ''
+                      endif
+                    if custom_label contains 'Bestseller'
+                      assign bestseller = true
+                    endif
+                    if custom_label contains 'New'
+                    assign new = true
+                  endif
+                   
+
+                  if custom_label contains 'Frame'
+                  assign frame = true
+                endif
+
+
+                  endif
+                endfor
+      
+            -%}
+
+
+            <div class="product__badge">
+
+              {% if on_sale == true  %}
+                <span class="p__badge badge-sale">Sale</span>
+                {% endif %}
+
+              {% if bestseller == true  %}
+                <span class="p__badge badge-bestseller">Bestseller</span>
+                {% endif %}
+
+                {% if new == true   %}
+                <span class="p__badge badge-new ">New</span>
+                {% endif %}
+
+            </div>
